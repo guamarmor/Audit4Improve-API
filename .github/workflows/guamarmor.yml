@@ -1,0 +1,27 @@
+name: guamarmor
+
+on:
+  workflow_dispatch:         # permite ejecución manual
+  issues:                    # se dispara cuando se crea/modifica un issue
+    types: [opened, reopened]
+  project_card:              # se dispara cuando se mueve una tarjeta
+    types: [moved]
+
+jobs:
+  demo-accion:
+    runs-on: ubuntu-latest
+    name: Acción con acción externa personalizada
+    steps:
+      - name: Echo del evento
+        run: echo "Se ha disparado el workflow por un evento: ${{ github.event_name }}"
+
+      - name: Acción de terceros - acción de fecha
+        uses: josStorer/get-current-time@v2.0.0
+        with:
+          format: 'YYYY-MM-DD HH:mm:ss'
+          utcOffset: '+2'
+        id: fecha
+
+      - name: Mostrar la fecha
+        run: echo "La fecha y hora actual es ${{ steps.fecha.outputs.time }}"
+
